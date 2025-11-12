@@ -16,8 +16,7 @@ namespace PayMopIntegration.Entities
 
         public string Status { get; set; } = "Active";
 
-       public int PaymentId { get; set; }
-        public Payment payment { get; set; }
+    
 
         public DateTime? CompletionDate { get; set; }
     }

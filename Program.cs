@@ -16,6 +16,9 @@ namespace PayMopIntegration
                 (options =>
                 options.UseSqlServer
                 (builder.Configuration.GetConnectionString("DefaultConnection")));
+            //Add Repository services
+            builder.Services.AddScoped<Interfaces.IStudent, Repoistory.StudentRepoistory>();
+            builder.Services.AddScoped<Interfaces.ICourses, Repoistory.CoursesRepoistory>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

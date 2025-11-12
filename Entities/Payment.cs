@@ -16,7 +16,8 @@ namespace PayMopIntegration.Entities
         public string PaymentMethod { get; set; }
 
         public string TransactionId { get; set; }
-
+        public int EnrollmentId { get; set; }
+        public Enrollment Enrollment { get; set; }
         public string Status { get; set; } = "Pending";
     }
 }
