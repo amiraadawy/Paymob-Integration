@@ -1,10 +1,6 @@
-﻿@{
-    ViewData["Title"] = "Enroll Form";
-}
+﻿<h2>Enter Student and Course IDs</h2>
 
-<h2>Enter Student and Course IDs</h2>
-
-<form asp-action="enroll" method="post">
+<form asp-action="CreatePayment" method="post">
     <div class="form-group">
         <label for="studentId">Student ID</label>
         <input type="number" id="studentId" name="studentId" class="form-control" required />
@@ -17,4 +13,3 @@
 
     <button type="submit" class="btn btn-primary mt-2">Submit</button>
 </form>
-

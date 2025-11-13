@@ -21,19 +21,32 @@ namespace PayMopIntegration.Repoistory
        
         public async Task<int> CreateOrderAsync (string token, decimal amountCents, string merchantOrderId)
         {
+            System.Net.ServicePointManager.SecurityProtocol =
+        System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls13;
+
             var body = new
             {
                 auth_token = token,
                 delivery_needed = false,
                 amount_cents = (int)amountCents,
                 currency = "EGP",
-                merchant_order_id = merchantOrderId
+                merchant_order_id = merchantOrderId,
+                items = Array.Empty<object>()
             };
-            var res = await _httpClient.PostAsync($"{_apiBaseUrl}/ecommerce/orders",
-               new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json"));
+
+            Console.WriteLine($"Sending order to: {_apiBaseUrl}/ecommerce/orders");
+            Console.WriteLine($"Body: {JsonSerializer.Serialize(body)}");
+
+            var res = await _httpClient.PostAsJsonAsync($"{_apiBaseUrl}/ecommerce/orders", body);
+
+            Console.WriteLine($"Response: {res.StatusCode}");
+            var json = await res.Content.ReadAsStringAsync();
+            Console.WriteLine($"Response body: {json}");
+
             res.EnsureSuccessStatusCode();
             var data = await res.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<PaymobOrderResponse>(data)?.Id ?? 0;
+            Console.WriteLine($"[PAYMOB ORDER RESPONSE]: {res.StatusCode} - {data}");
+            return JsonSerializer.Deserialize<PaymobOrderResponse>(data)?.OrderId ?? 0;
            
         }
 

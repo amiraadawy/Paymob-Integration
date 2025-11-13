@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using PayMopIntegration.Interfaces;
 using PayMopIntegration.Models;
 using System.Text.Json;
 
 namespace PayMopIntegration.Controllers
 {
-   
-    public class PaymentsApiController : ControllerBase
+    public class PaymentMvcController : Controller
     {
         private readonly IPaymobService _paymobService;
         private readonly ICourses _coursesRepoistory;
@@ -16,13 +13,12 @@ namespace PayMopIntegration.Controllers
         private readonly IStudent _studentRepoistory;
         private readonly IPayment _paymentRepoistory;
         private readonly IConfiguration _config;
-        public PaymentsApiController(IPaymobService paymobService,
+        public PaymentMvcController(IPaymobService paymobService,
             ICourses coursesRepoistory,
             IEnrollment enrollmentsRepoistory,
             IStudent studentRepoistory,
             IConfiguration config,
-            IPayment paymentRepoistory
-            )
+            IPayment paymentRepoistory)
         {
             _paymobService = paymobService;
             _coursesRepoistory = coursesRepoistory;
@@ -31,9 +27,12 @@ namespace PayMopIntegration.Controllers
             _config = config;
             _paymentRepoistory = paymentRepoistory;
 
-
         }
-        [HttpPost("create/{StudentId}/{CourseId}")]
+        public IActionResult Index()
+        {
+            return View();
+        }
+   
         public async Task<IActionResult> CreatePayment(enrollmentRequest enrollmentRequest)
         {
             var student = await _studentRepoistory.GetById(enrollmentRequest.StudentId);
@@ -66,11 +65,13 @@ namespace PayMopIntegration.Controllers
                 EnrollmentId = enrollment.Id,
                 Amount = amount,
                 PaymentDate = DateTime.UtcNow,
+                PaymentMethod="Card",
                 Status = "Pending"
             };
             await _paymentRepoistory.CreatePaymentAsync(PaymentRecord);
 
-            return Ok(new { paymentUrl });
+            ViewBag.PaymentUrl = paymentUrl;
+            return View("Payment");
 
         }
         [HttpPost("callback")]
@@ -88,7 +89,8 @@ namespace PayMopIntegration.Controllers
                 await _paymentRepoistory.UpdatePaymentAsync(payment);
             }
 
-            return Ok();
+            return View("index1");
         }
+
     }
 }

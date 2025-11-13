@@ -23,11 +23,12 @@ namespace PayMopIntegration
             builder.Services.AddScoped<Interfaces.ICourses, Repoistory.CoursesRepoistory>();
             builder.Services.AddScoped<Interfaces.IEnrollment, Repoistory.EnrollmentRepoistory>();
             builder.Services.AddScoped<Interfaces.IPayment, Repoistory.PaymentRepoistory>();
-            var app = builder.Build();
             //add paymob services
             // Paymob service
             builder.Services.AddHttpClient<PaymobService>();
-            builder.Services.AddScoped<IPaymobService,PaymobService>();
+            builder.Services.AddScoped<IPaymobService, PaymobService>();
+            var app = builder.Build();
+           
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -45,7 +46,7 @@ namespace PayMopIntegration
            
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=PaymentMvc}/{action=Index}/{id?}");
 
             app.Run();
         }
