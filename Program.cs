@@ -21,6 +21,8 @@ namespace PayMopIntegration
             //Add Repository services
             builder.Services.AddScoped<Interfaces.IStudent, Repoistory.StudentRepoistory>();
             builder.Services.AddScoped<Interfaces.ICourses, Repoistory.CoursesRepoistory>();
+            builder.Services.AddScoped<Interfaces.IEnrollment, Repoistory.EnrollmentRepoistory>();
+            builder.Services.AddScoped<Interfaces.IPayment, Repoistory.PaymentRepoistory>();
             var app = builder.Build();
             //add paymob services
             // Paymob service
@@ -40,7 +42,7 @@ namespace PayMopIntegration
             app.UseRouting();
 
             app.UseAuthorization();
-
+           
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
