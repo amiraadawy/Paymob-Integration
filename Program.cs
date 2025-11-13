@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PayMopIntegration.Context;
+using PayMopIntegration.Interfaces;
+using PayMopIntegration.Repoistory;
 
 namespace PayMopIntegration
 {
@@ -20,7 +22,10 @@ namespace PayMopIntegration
             builder.Services.AddScoped<Interfaces.IStudent, Repoistory.StudentRepoistory>();
             builder.Services.AddScoped<Interfaces.ICourses, Repoistory.CoursesRepoistory>();
             var app = builder.Build();
-
+            //add paymob services
+            // Paymob service
+            builder.Services.AddHttpClient<PaymobService>();
+            builder.Services.AddScoped<IPaymobService,PaymobService>();
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
